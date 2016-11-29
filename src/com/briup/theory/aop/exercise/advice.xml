@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+    <!-- 切面类 -->
+	<bean name="bank" class="com.briup.theory.aop.exercise.Bank"></bean>
+	<bean name="logger" class="com.briup.bean.Logger"></bean>
+	<!-- Advice类 -->
+	<bean name="after" class="com.briup.theory.aop.exercise.After">
+		<property name="bank" ref="bank"></property>
+	</bean>
+	<bean name="before" class="com.briup.theory.aop.exercise.Before">
+		<property name="bank" ref="bank"></property>
+	</bean>
+	<bean name="around" class="com.briup.theory.aop.exercise.Around">
+		<property name="bank" ref="bank"></property>
+	</bean>
+	<bean name="throw" class="com.briup.theory.aop.exercise.Throwing">
+		<property name="logger" ref="logger"></property>
+	</bean>
+	<!-- 目标对象 -->
+	<bean name="target" class="com.briup.theory.aop.exercise.IAccountImpl"></bean>
+	<!-- 代理对象 -->
+	<bean name="proxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- 注入目标对象 -->
+		<property name="target" ref="target"></property>
+		<!-- 注入目标对象实现的多个接口 -->
+		<property name="proxyInterfaces">
+			<list>
+				<value>com.briup.theory.aop.exercise.IAccountService</value>
+			</list>
+		</property>
+		<!-- 注入Advice -->
+		<property name="interceptorNames">
+			<list>
+				<value>before</value>
+				<value>after</value>
+				<value>around</value>
+				<value>throw</value>
+			</list>
+		</property>
+	</bean>
+ </beans>

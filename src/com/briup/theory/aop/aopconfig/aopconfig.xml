@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+	<!-- 配置切面类 -->
+	<bean id="logger" class="com.briup.bean.Logger"></bean>
+	<!-- 配置advice类 -->         
+	<bean id="after" class="com.briup.theory.aop.after.After">
+		<property name="logger" ref="logger"></property>
+	</bean>
+	<!-- 配置目标类 -->
+	<bean id="act" class="com.briup.theory.aop.aopconfig.Action"></bean>
+	<!-- 配置代理对象：aop-config -->
+	<!-- proxy-target-class属性：默认false
+		 true：cglib继承来实现动态代理 
+	 	 false：使用jdk实现接口的方式来实现动态代理
+	-->
+	<aop:config proxy-target-class="false">
+		<!-- 定义切入点 -->
+		<aop:pointcut expression="execution(public * com.briup.theory.aop.aopconfig.Action.*(..))" id="actCut"/>
+		<!-- 定义拦截器 -->
+		<!-- 让指定的advice拦截器，把我们定义的切面织入到指定切入点上 -->
+		<!-- 至于织入到切入点的什么位置就由拦截器来确定 -->
+		<aop:advisor advice-ref="after" pointcut-ref="actCut"/>
+	</aop:config>
+	
+</beans>

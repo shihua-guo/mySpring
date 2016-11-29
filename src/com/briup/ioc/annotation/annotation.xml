@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		    xmlns:context="http://www.springframework.org/schema/context"
+		    xsi:schemaLocation="
+   http://www.springframework.org/schema/beans 
+   http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+   http://www.springframework.org/schema/context 
+   http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+
+       <!--  @Autowired
+  1 @Autowired默认按照byType匹配的方式进行注入,如果没有一个bean的类型是匹配的则会抛异常,如果有多个bean的类型都匹配成功了,那么再按byName方式进行选择
+  2 @Autowired注解可以写在成员变量、setter方法、构造器函数上面
+  3 @Autowired如果最终匹配不成功(注意一定是一个都没有找到的情况)则会抛出异常,但是如果设置为 @Autowired(required=false),则最终匹配不成功没有不会抛出异常。
+  4 @Autowired可以结合 @Qualifier("beanName")来使用,则可以达到byName的效果
+  5 @Autowired使用后需要在xml文件加入以下配置才能生效:
+       -->
+      <context:annotation-config/>  
+       <!--   @Resource
+  1 @Resource的作用和 @Autowired差不多,只不过 @Resource是默认先用byName,如果找不到合适的就再用byType来注入
+  2 @Resource有俩个属性,name和type,使用name属性则表示要byName匹配,使用type属性则表示要byType匹配
+  3 @Resource使用后需要在xml文件加入以下配置才能生效:
+      <context:annotation-config/>
+       -->
+       	 
+	<!-- <bean id="boss" class="com.briup.ioc.annotation.Boss">
+	</bean>
+	<bean id="car2" class="com.briup.ioc.annotation.Car">
+		<property name="name" value="bmw"></property>
+		<property name="price" value="80000"></property>
+	</bean>
+	<bean id="office" class="com.briup.ioc.annotation.Office">
+		<property name="num" value="90"></property>
+	</bean> -->
+	
+       <!-- @Component
+  1 @Component注解可以直接定义bean，而无需在xml定义。但是若两种定义同时存在，xml中的定义会覆盖类中注解的Bean定义。
+  2 @Component注解直接写在类上面即可
+  3 @Component有一个可选的参数，用于指定 bean 的名称: @Component("boss")
+  4 @Component容易不指定参数，则 bean 的名称为当前类的类名小写
+  5 @Component使用之后需要在xml文件配置一个标签: <context:component-scan/>
+  6 <context:component-scan base-package="com.briup.ioc.annotation" /> 可以表示spring需要检查哪个包下的java类,看它们是否使用了 @Component注解
+  7 @Component定义的bean默认情况下都是单例模式的,如果要让这个bean变为非单例,可以再结合这个 @Scope 注解来达到目标 @Scope("prototype")
+
+
+  @Component是Spring中所有bean组件的通用形式, @Repository @Service @Controller 则是 @Component的细化,用来表示更具体的用例，分别对应了持久化层、服务层和表现层。但是至少到现在为止这个四种注解的实质区别很小(甚至几乎没有),都是把当前类注册为spring容器中的一个bean
+         注意:
+  component-scan标签默认情况下自动扫描指定路径下的包（含所有子包），将带有 @Component @Repository @Service @Controller标签的类自动注册到spring容器。
+    对标记了 Spring中的 @Required @Autowired @PostConstruct @PreDestroy @Resource @WebServiceRef @EJB   @PersistenceContext @PersistenceUnit等注解的类进行对应的操作使注解生效（包含了annotation-config标签的作用）。
+        -->
+	 <context:component-scan base-package="com.briup.ioc.annotation" />
+	 
+
+</beans>

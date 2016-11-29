@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+    <!-- 切面类 -->
+	<bean name="logger" class="com.briup.bean.Logger"></bean>
+	<!-- Advice类 -->
+	<bean name="after" class="com.briup.theory.aop.after.After">
+		<property name="logger" ref="logger"></property>
+	</bean>
+	<bean name="before" class="com.briup.theory.aop.before.Before">
+		<property name="logger" ref="logger"></property>
+	</bean>
+	<!-- Advisor -->
+	<bean name="advisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<!-- 注入哪个advice.需要在哪个advice起作用 -->
+		<property name="advice" ref="before"></property>
+		<!-- 需要拦截哪一个方法（join point） -->
+		<property name="patterns">
+			<list>
+				<value>.*save</value>
+				<value>.*drop</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 目标对象 -->
+	<bean name="save1" class="com.briup.theory.aop.auto.Save"></bean>
+	<bean name="save2" class="com.briup.theory.aop.auto.Save"></bean>
+	<bean name="save3" class="com.briup.theory.aop.auto.Save"></bean>
+	<bean name="save4" class="com.briup.theory.aop.auto.Save"></bean>
+	<bean name="save5" class="com.briup.theory.aop.auto.Save"></bean>
+	<bean name="drop" class="com.briup.theory.aop.auto.Drop"></bean>
+	<!-- 代理对象,不能配置任何的属性 -->
+	<!-- 配置代理对象，这个代理对象不是工厂，所以不能通过"proxy"来获取这个对象 -->
+	<!-- <bean name="proxy" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+	 -->
+	<!-- 配置通过名字来自动代理的 -->
+	<bean name="proxy" class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<!-- 注入需要代理的bean的名字 -->
+		<property name="beanNames">
+			<list>
+				<value>save1</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+ </beans>
